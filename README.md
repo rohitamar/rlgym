@@ -6,6 +6,7 @@ Agents
 - SARSA
 - REINFORCE
 - Actor-Critic
+- PPO
 
 Environments
 - Cliff Walking (custom)
