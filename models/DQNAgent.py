@@ -5,9 +5,10 @@ import torch
 import torch.optim as optim
 import torch.nn.functional as F
 
-from models.QNetwork import QNetwork
+from agents.Agent import Agent 
+from agents.QNetwork import QNetwork
 
-class DQNAgent:
+class DQNAgent(Agent):
     def __init__(self, state_size, action_size, lr, device):
         self.state_size = state_size
         self.action_size = action_size

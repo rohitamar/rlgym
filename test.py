@@ -2,7 +2,7 @@ import gymnasium as gym
 import time 
 import torch 
 
-from models.DQNAgent import DQNAgent
+from agents.DQNAgent import DQNAgent
 
 test_episodes = 100
 episode_rewards = []
