@@ -19,9 +19,11 @@ class QNetwork(nn.Module):
         return self.fc3(x)
 
 class DQNAgent:
-    def __init__(self, state_size, action_size, lr, device):
+    def __init__(self, state_size, action_size, gamma, lr, device):
         self.state_size = state_size
         self.action_size = action_size
+        self.gamma = gamma 
+        
         self.device = device 
 
         self.qnetwork_local = QNetwork(state_size, action_size).to(self.device)
@@ -63,7 +65,7 @@ class DQNAgent:
 
         return action_values.argmax(dim=1).item() if np.random.random() > eps else np.random.randint(self.action_size)
 
-    def learn(self, experiences, gamma):
+    def learn(self, experiences=None):
         states, actions, rewards, next_states, dones = zip(*experiences)
         states = torch.from_numpy(np.vstack(states)).float().to(self.device)
         actions = torch.from_numpy(np.vstack(actions)).long().to(self.device)
@@ -72,7 +74,7 @@ class DQNAgent:
         dones = torch.from_numpy(np.vstack(dones).astype(np.uint8)).float().to(self.device)
 
         Q_targets_next = self.qnetwork_target(next_states).detach().max(1)[0].unsqueeze(1)
-        Q_targets = rewards + (gamma * Q_targets_next * (1 - dones))
+        Q_targets = rewards + (self.gamma * Q_targets_next * (1 - dones))
         Q_preds = self.qnetwork_local(states).gather(1, actions)
 
         loss = F.mse_loss(Q_preds, Q_targets)
