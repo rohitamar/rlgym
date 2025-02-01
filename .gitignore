@@ -1,2 +1,2 @@
-./checkpoints
-./agents/__pycache__
+checkpoints
+models/__pycache__
