@@ -4,7 +4,7 @@ import torch.optim as optim
 import torch.nn as nn 
 from torch.distributions import Categorical 
 
-from models.Agent import Agent 
+from utils.Agent import Agent 
 
 class PolicyNetwork(nn.Module):
     def __init__(self, state_size, action_size, fc1_units=64, fc2_units=64):
@@ -19,23 +19,18 @@ class PolicyNetwork(nn.Module):
         return F.softmax(self.fc3(x), dim = -1)
 
 class REINFORCE(Agent):
-    def __init__(self, state_size, action_size, gamma=0.99, lr=1e-2):
+    def __init__(self, state_size, action_size, device, gamma=0.99, lr=1e-2):
         super(REINFORCE, self).__init__()
-        self.policy = PolicyNetwork(state_size, action_size)
+        self.device = device 
+        self.policy = PolicyNetwork(state_size, action_size).to(self.device)
         self.gamma = gamma 
         self.optimizer = optim.Adam(self.policy.parameters(), lr=lr)
         
         self.log_probs = []
         self.rewards = []
-
-    def save_weights(self):
-        pass 
-
-    def load_weights(self, filename):
-        pass
     
     def act(self, state):
-        state = torch.from_numpy(state).float().unsqueeze(0)
+        state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
         probs = self.policy(state)
         m = Categorical(probs)
         action = m.sample()
@@ -56,7 +51,7 @@ class REINFORCE(Agent):
         dis_rewards = (dis_rewards - dis_rewards.mean()) / dis_rewards.std()
         loss = []
         for g_t, log_prob in zip(dis_rewards, self.log_probs):
-            loss.append(g_t * log_prob)    
+            loss.append(g_t * -log_prob)    
         loss = torch.cat(loss).sum()
 
         self.optimizer.zero_grad()

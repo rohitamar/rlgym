@@ -13,3 +13,4 @@ Environments
 - Cartpole
 - LunarLander
 - Minigrid
+- Pokemon-env (final!)
