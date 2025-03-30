@@ -2,11 +2,12 @@
 
 Agents
 - Dynamic Programming
-- Q-learning
-- SARSA
-- REINFORCE
-- Actor-Critic
-- PPO
+- Monte Carlo
+- Q-learning (Double)
+- SARSA (Expected)
+- REINFORCE (Baseline too)
+- Actor-Critic (GAE)
+- TRPO and PPO
 
 Environments
 - Cliff Walking (custom)
