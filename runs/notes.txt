@@ -1,4 +1,0 @@
-3 - huber loss, trained w/o catastrophic
-4 - huber loss, trained with catastrophic
-5 - mse, trained with catastrophic
-6 - mse, trained w/o catastrophic 
