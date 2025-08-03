@@ -1,4 +1,5 @@
 import numpy as np 
+from numpy.random import rand, randint 
 import torch 
 import torch.nn as nn
 import torch.optim as optim
@@ -21,19 +22,19 @@ class QNetwork(nn.Module):
         return self.layer3(x)
 
 class DQNAgent(Agent):
-    def __init__(self, state_size, action_size, *, gamma, lr, device):
+    def __init__(self, state_size: int, action_size: int, *, gamma, lr, device):
         self.state_size = state_size
         self.action_size = action_size
         self.gamma = gamma 
         self.device = device 
 
-        self.local = QNetwork(state_size, action_size).to(self.device)
-        self.target = QNetwork(state_size, action_size).to(self.device)
+        self.local: nn.Module = QNetwork(state_size, action_size).to(self.device)
+        self.target: nn.Module = QNetwork(state_size, action_size).to(self.device)
 
         self.optimizer = optim.Adam(self.local.parameters(), lr)
         self.scheduler = optim.lr_scheduler.StepLR(self.optimizer, step_size=5000, gamma=0.9)
     
-    def save_weights(self, path):
+    def save_weights(self, path: str) -> None:
         filename = os.path.join(path, 'weights.pth')
         
         torch.save({
@@ -42,7 +43,7 @@ class DQNAgent(Agent):
             'action_size': self.action_size
         }, filename)
     
-    def load_weights(self, filename):
+    def load_weights(self, filename: str) -> None:
         checkpoint = torch.load(filename, map_location=self.device)
         self.qnetwork_local.load_state_dict(checkpoint['local_state_dict'])
 
@@ -54,18 +55,19 @@ class DQNAgent(Agent):
         
         print(f"Model weights loaded from {filename}")
 
-    def act(self, state, eps=0.):
+    def act(self, state: torch.Tensor, eps=0.):
         state = state.unsqueeze(0)
         self.local.eval()
         with torch.no_grad():
             action_values = self.local(state)
-        self.local.train()
 
-        if np.random.rand() > eps:
+        if rand() > eps:
             return action_values.argmax(dim=1).item()
-        return np.random.randint(self.action_size)
+        return randint(self.action_size)
 
     def learn(self, experiences=None):
+        self.local.train()
+
         batch = Transition(*zip(*experiences))
         
         states = torch.vstack(batch.state).float()
