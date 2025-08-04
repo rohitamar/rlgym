@@ -29,9 +29,13 @@ def train_dp(env):
     )
     
     sentinel = False
+    iterations = 0
     while not sentinel:
         agent.evaluate()
         sentinel = agent.improve()
+        iterations += 1
+    
+    print(f"Iterations taken: {iterations}")
     
     state, _ = env.reset()
     terminated = truncated = False

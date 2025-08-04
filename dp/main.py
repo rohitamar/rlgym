@@ -12,6 +12,10 @@ env = gym.make(
     is_slippery=False,
     render_mode="human"
 )
-# print(f"Target reward: {env.spec.reward_threshold}")
+# env = gym.make(
+#     "Taxi-v3",
+#     render_mode="human"
+# )
+print(f"Target reward: {env.spec.reward_threshold}")
 
 agent = train_dp(env)
