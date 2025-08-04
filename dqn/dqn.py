@@ -64,7 +64,7 @@ class DQNAgent(Agent):
         if rand() > eps:
             return action_values.argmax(dim=1).item()
         return randint(self.action_size)
-
+    
     def learn(self, experiences=None):
         self.local.train()
 
@@ -90,5 +90,6 @@ class DQNAgent(Agent):
         for target, local in zip(self.target.parameters(), self.local.parameters()):
             target.data.copy_(0.005 * local.data + (1.0 - 0.005) * target.data)
         
+        return loss.item()
 
 

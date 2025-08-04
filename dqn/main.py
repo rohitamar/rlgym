@@ -8,7 +8,10 @@ from dqn.train_dqn import train_dqn
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 path = f"./runs/dqn-{timestamp}"
 writer = SummaryWriter(path)
-env = gym.make("CartPole-v1", render_mode='human')
+env = gym.make(
+    "CartPole-v1", 
+    render_mode='human'
+)
 print(f"Target reward: {env.spec.reward_threshold}")
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

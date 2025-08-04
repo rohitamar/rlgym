@@ -27,11 +27,13 @@ def train_dqn(env, device, writer):
     input_dim = env.observation_space.shape[0]
     output_dim = env.action_space.n
 
-    agent = DQNAgent(input_dim, 
-                     output_dim, 
-                     gamma=gamma, 
-                     lr=lr, 
-                     device=device)
+    agent = DQNAgent(
+        input_dim, 
+        output_dim, 
+        gamma=gamma, 
+        lr=lr, 
+        device=device
+    )
 
     cnt_loss_step = 0
 

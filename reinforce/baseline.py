@@ -94,7 +94,6 @@ class Baseline(Agent):
     
     def save_weights(self, path):
         filename = os.path.join(path, 'weights.pth')
-        6
         torch.save({
             'policy': self.policy.state_dict(),
             'value': self.value.state_dict(),
